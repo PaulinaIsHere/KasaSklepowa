@@ -5,11 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace KasaSklepowa.View
 
 {
     public static class Display
     {
+        static bool IsNumber(string input)
+        {
+            return int.TryParse(input, out _);
+        }
         public static int ShowMenuAndGetChoice()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
@@ -22,9 +27,30 @@ namespace KasaSklepowa.View
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(" WYBIERZ 1, 2 LUB 3:");
-
-            var answer = Console.ReadLine();
-            return int.Parse(answer);
+            while (true)
+            {
+                var answer = Console.ReadLine();
+                if (IsNumber(answer))
+                {
+                    int parsedAnswer = int.Parse(answer);
+                    if (parsedAnswer >= 1 && parsedAnswer <= 3)
+                    {
+                        return parsedAnswer;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("Wprowadź poprawną wartość (1, 2 lub 3)!");
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("Niepoprawna wartość. Podaj liczbę.");
+                }
+            }
         }
         public static int ShowProducts(List<Product> products)
         {
@@ -58,7 +84,7 @@ namespace KasaSklepowa.View
             Console.WriteLine("__________________________________");
             foreach (var product in cart.products)
             {
-                Console.WriteLine(product.nazwa+ " | " + product.cenaNetto + " zł");
+                Console.WriteLine(product.nazwa + " | " + product.cenaNetto + " zł");
             }
             Console.WriteLine("__________________________________");
             Console.WriteLine("DO ZAPŁATY: " + cart.GetBruttoTotalAmount());
@@ -66,5 +92,5 @@ namespace KasaSklepowa.View
             Console.WriteLine("__________________________________");
         }
     }
-   
+
 }
